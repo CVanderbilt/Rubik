@@ -6,6 +6,7 @@ public class InputManager: MonoBehaviour
 {
 	public CameraRubik cam;
 
+	public int shifted = 1;
 	public KeyCode movLeft = KeyCode.LeftArrow;
 	private bool movLeftFlag = false;
 	public KeyCode movRight = KeyCode.RightArrow;
@@ -25,14 +26,30 @@ public class InputManager: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (Input.GetKeyDown(KeyCode.LeftShift))
+			shifted = -1;
+		if (Input.GetKeyUp(KeyCode.LeftShift))
+			shifted = 1;
+
 		if (Input.GetKeyDown(KeyCode.X))
-			cubeRotator.StartMov(RubikMaster.movs.x, 1);
+			cubeRotator.StartMov(RubikMaster.movs.x, shifted);
 		if (Input.GetKeyDown(KeyCode.Y))
-			cubeRotator.StartMov(RubikMaster.movs.y, 1);
+			cubeRotator.StartMov(RubikMaster.movs.y, shifted);
 		if (Input.GetKeyDown(KeyCode.Z))
-			cubeRotator.StartMov(RubikMaster.movs.z, 1);
+			cubeRotator.StartMov(RubikMaster.movs.z, shifted);
+
 		if (Input.GetKeyDown(KeyCode.U))
-			cubeRotator.StartMov(RubikMaster.movs.U, 1);
+			cubeRotator.StartMov(RubikMaster.movs.U, shifted);
+		if (Input.GetKeyDown(KeyCode.D))
+			cubeRotator.StartMov(RubikMaster.movs.D, shifted);
+		if (Input.GetKeyDown(KeyCode.L))
+			cubeRotator.StartMov(RubikMaster.movs.L, shifted);
+		if (Input.GetKeyDown(KeyCode.R))
+			cubeRotator.StartMov(RubikMaster.movs.R, shifted);
+		if (Input.GetKeyDown(KeyCode.F))
+			cubeRotator.StartMov(RubikMaster.movs.F, shifted);
+		if (Input.GetKeyDown(KeyCode.B))
+			cubeRotator.StartMov(RubikMaster.movs.B, shifted);
 
         if (Input.GetKeyDown(movLeft))
 			movLeftFlag = true;

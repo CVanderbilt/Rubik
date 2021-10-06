@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RubikMaster : MonoBehaviour
 {
+	public enum face{ F, R, B, L, U, D };
 	public enum movs{
 		U, //upper
 		u, //double-layer U
@@ -49,14 +50,6 @@ public class RubikMaster : MonoBehaviour
 		return (mats[(int)c]);
 	}
 
-	public RubikMaster.color GetColorFromVector(Vector3 v)
-	{
-		for (int i = 0; i < centers.Length; i++)
-			if (centers[i].transform.forward == v)
-				return (centers[i].color);
-		return (centers[0].color);
-
-	}
 	public Vector3 GetVector(RubikMaster.color c)
 	{
 		switch (c)
@@ -83,34 +76,14 @@ public class RubikMaster : MonoBehaviour
 		}
 	}
 
-	public void Rotate(RubikMaster.color c, int r)
+	public void Rotate(RubikMaster.face f, int r)
 	{
-		Center center = centers[(int)c];
-		int count = 0;
-		Vector3 vFace = center.transform.forward;
-
-		for (int i = 0; i < squares.Length; i++)
-		{
-			Square s = squares[i];
-			
-			if (s.IsInFace(vFace))
+		for (int i = 0; i < 6; i++)
+			if (centers[i].face == f)
 			{
-				s.transform.parent = center.transform;
-				//s.transform.SetParent(center.transform);
-				count++;
+				centers[i].StartRotation(r);
+				return ;
 			}
-
-			if (count == 8)
-			{
-				Debug.Log("sale bien");
-				break ;
-			}
-		}
-
-		Rotations rot = center.GetComponent<Rotations>();
-		if (rot != null)
-			rot.StartRotation(r);
-
 	}
 
 	private void Start() {
@@ -119,12 +92,8 @@ public class RubikMaster : MonoBehaviour
 		if (!inputManager)
 			Debug.Log("Input manager missing");
 	}
-	private void Update() {
+	private void LateUpdate() {
 		Rotations.rotSpeed = rotSpeed;
-		if (Input.GetKey(KeyCode.Space))
-		{
-			Rotate(RubikMaster.color.BLUE, 1);
-		}
 	}
 
 	public void PrintInfo()

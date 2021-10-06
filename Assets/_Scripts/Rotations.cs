@@ -10,6 +10,8 @@ public class Rotations : MonoBehaviour
 	public static float rotSpeed = 5;
 	private int direction;
 
+	public delegate void TestDelegate(); // This defines what type of method you're going to call.
+	private TestDelegate toCall = null;
     // Update is called once per frame
     private void Update()
     {
@@ -39,17 +41,21 @@ public class Rotations : MonoBehaviour
 					Transform Go = transform.GetChild(0);
 					Go.parent = transform.parent.parent;
 				}
+				if (toCall != null)
+					toCall();
+				toCall = null;
 			}
 		}
 	}
 
-	public void StartRotation(int d)
+	public bool StartRotation(int d, TestDelegate callOnMovementEnd)
 	{
 		if (rotating != 0)
-			return ;
-
+			return false;
+		toCall = callOnMovementEnd;
 		rotating = 90;
 		
 		direction = d > 0 ? 1 : -1;
+		return (true);
 	}
 }

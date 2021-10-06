@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Square : MonoBehaviour
 {
+	public bool isMoving = false;
 	private bool running = false;
 	[System.Serializable]
 	public struct Vc{
@@ -14,8 +15,8 @@ public class Square : MonoBehaviour
 	public RubikMaster master;
 
 	public Vc[] vc;
-	private int faces = 0;
-
+	//private int faces = 0;
+/*
 	public void SetFace(RubikMaster.color c, Vector3 v)
 	{
 		if (faces >= this.vc.Length)
@@ -25,7 +26,7 @@ public class Square : MonoBehaviour
 		vc[faces].o.transform.forward = v;
 		vc[faces].o.transform.parent = transform;
 		faces++;
-	}
+	}*/
 	private void Start() {
 		running = true;
 	}

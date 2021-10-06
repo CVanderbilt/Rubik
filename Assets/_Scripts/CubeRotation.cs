@@ -67,7 +67,7 @@ public class CubeRotation : MonoBehaviour
 	/*
 	*	Rotacion no bloquante.
 	*/
-	private void ApplyRotation()
+		private void ApplyRotation()
 	{
 		float speed = customRotSpeed == 0 ? rotSpeed : customRotSpeed;
 		if (rotating > 0)
@@ -75,6 +75,7 @@ public class CubeRotation : MonoBehaviour
 			float step = Time.deltaTime * speed;
 			step = step > rotating ? rotating : step;
 			rotating -= step;
+			step *= direction;
 			Vector3 ea = transform.eulerAngles;
 
 			//transform.rotation = Quaternion.Euler(step, 0, 0) * transform.rotation;
@@ -92,22 +93,76 @@ public class CubeRotation : MonoBehaviour
 			if (rotating == 0)
 			{
 				FixRotation();
-				master.PrintInfo();
 			}
 		}
 	}
 
-	//tiene 6 rotaciones diferentes: left, right, up, down.(cambiando de cara)
-	//								left, right (sin cambiar cara) eje z
-	//como dependiendo de donde estemos mirando cambia la perspectiva
-	//podemos pasar de parametros el color que estamos mirando y el color al que
-	//queremos movernos, y la función deduce.
-	//public void StartRotation(RubikMaster.color face, RubikMaster.color target)
+	private void RotX(int d)
+	{
+		for (int i = 0; i < 6; i++)
+			switch (master.centers[i].face)
+			{
+				case RubikMaster.face.F: master.centers[i].face = d > 0 ?
+					RubikMaster.face.U : RubikMaster.face.D; break ;
+				case RubikMaster.face.U: master.centers[i].face = d > 0 ?
+					RubikMaster.face.B : RubikMaster.face.F; break ;
+				case RubikMaster.face.B: master.centers[i].face = d > 0 ?
+					RubikMaster.face.D : RubikMaster.face.U; break ;
+				case RubikMaster.face.D: master.centers[i].face = d > 0 ?
+					RubikMaster.face.F : RubikMaster.face.B; break ;
+				default: break ;
+			}
+	}
+
+	private void RotY(int d)
+	{
+		for (int i = 0; i < 6; i++)
+			switch (master.centers[i].face)
+			{
+				case RubikMaster.face.F: master.centers[i].face = d > 0 ?
+					RubikMaster.face.L : RubikMaster.face.R; break ;
+				case RubikMaster.face.L: master.centers[i].face = d > 0 ?
+					RubikMaster.face.B : RubikMaster.face.F; break ;
+				case RubikMaster.face.B: master.centers[i].face = d > 0 ?
+					RubikMaster.face.R : RubikMaster.face.L; break ;
+				case RubikMaster.face.R: master.centers[i].face = d > 0 ?
+					RubikMaster.face.F : RubikMaster.face.B; break ;
+				default: break ;
+			}
+	}
+
+	private void RotZ(int d)
+	{
+		for (int i = 0; i < 6; i++)
+			switch (master.centers[i].face)
+			{
+				case RubikMaster.face.U: master.centers[i].face = d > 0 ?
+					RubikMaster.face.R : RubikMaster.face.L; break ;
+				case RubikMaster.face.L: master.centers[i].face = d > 0 ?
+					RubikMaster.face.U : RubikMaster.face.D; break ;
+				case RubikMaster.face.D: master.centers[i].face = d > 0 ?
+					RubikMaster.face.L : RubikMaster.face.R; break ;
+				case RubikMaster.face.R: master.centers[i].face = d > 0 ?
+					RubikMaster.face.D : RubikMaster.face.U; break ;
+				default: break ;
+			}
+	}
+
+	/*
+	*	Rota el cubo, pero los vectores deberían actualizarse al principio del movimiento.
+	*	Según la m sabemos que tipo de movimiento es y por lo tanto que vectores actualizar.
+	*/
 	public void StartRotation(RubikMaster.movs m, int n)
 	{
-
 		if (rotating != 0)
 			return ;
+
+		switch (m)
+		{
+			case RubikMaster.movs.x: RotX(n); break ;
+			case RubikMaster.movs.y: RotY(n); break ;
+			default: RotZ(n); break ;
+		}
 
 		movement = m;
 		rotating = 90 * n;
@@ -127,7 +182,22 @@ public class CubeRotation : MonoBehaviour
 			switch (m)
 			{
 				case RubikMaster.movs.U:
-					master.Rotate(master.GetColorFromVector(new Vector3(0, 1, 0)), 1);
+					master.Rotate(RubikMaster.face.U, n);
+					break ;
+				case RubikMaster.movs.F:
+					master.Rotate(RubikMaster.face.F, n);
+					break ;
+				case RubikMaster.movs.B:
+					master.Rotate(RubikMaster.face.B, n);
+					break ;
+				case RubikMaster.movs.D:
+					master.Rotate(RubikMaster.face.D, n);
+					break ;
+				case RubikMaster.movs.R:
+					master.Rotate(RubikMaster.face.R, n);
+					break ;
+				case RubikMaster.movs.L:
+					master.Rotate(RubikMaster.face.L, n);
 					break ;
 				default:
 					Debug.Log("Movement not implemented");
