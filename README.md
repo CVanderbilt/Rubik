@@ -3,7 +3,7 @@
 ## Introduction
 Rubik is an interactive project that simulates a Rubik's Cube, featuring textured smaller cubes created with Blender. Users can manipulate the cube using basic inputs to perform various movements. Movements are selected by pressing the corresponding key, based on the [move notation](https://en.wikipedia.org/wiki/Optimal_solutions_for_Rubik%27s_Cube#:~:text=The%20letters%20L%2C%20R%2C%20F,a%20prime%20symbol%20(%20%E2%80%B2%20)) (M, S, and E not implemented).
 
-![alt text](https://github.com/CVanderbilt/Rubik/blob/main/other_resources/rubikVid.gif "SampleAnimation")
+![alt text](https://github.com/CVanderbilt/Rubik/blob/master/other_resources/rubikVid.gif "SampleAnimation")
 
 ### Implemented Movements:
 * **U**: Rotate the upper face 90 degrees clockwise.
